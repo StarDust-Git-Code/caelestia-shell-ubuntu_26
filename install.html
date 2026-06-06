@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Install Caelestia Shell on Ubuntu 26.04</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-1: #38bdf8;
+            --accent-2: #818cf8;
+            --accent-glow: rgba(56, 189, 248, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(129, 140, 248, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .step-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 15px rgba(129, 140, 248, 0.1);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .step-card:hover::before {
+            opacity: 1;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-right: 15px;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .step-card p {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background: #04060b;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 15px 20px;
+            position: relative;
+            font-family: 'Courier New', Courier, monospace;
+            color: #a5b4fc;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            display: block;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 15px 0;
+        }
+
+        .warning-box p {
+            color: #fcd34d !important;
+            margin: 0 !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Staggered animation for cards */
+        .step-card:nth-child(1) { animation-delay: 0.1s; }
+        .step-card:nth-child(2) { animation-delay: 0.2s; }
+        .step-card:nth-child(3) { animation-delay: 0.3s; }
+        .step-card:nth-child(4) { animation-delay: 0.4s; }
+        .step-card:nth-child(5) { animation-delay: 0.5s; }
+        .step-card:nth-child(6) { animation-delay: 0.6s; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Caelestia Shell Setup</h1>
+        <p class="subtitle">A stunning Wayland desktop experience for Ubuntu 26.04</p>
+    </header>
+
+    <div class="step-card">
+        <div class="step-header">
+            <div class="step-number">1</div>
+            <div class="step-title">Open Terminal</div>
+        </div>
+        <p>Launch your default Ubuntu terminal application. You can usually do this by pressing <strong>Ctrl + Alt + T</strong> on your keyboard.</p>
+    </div>
+
+    <div class="step-card">
+        <div class="step-header">
+            <div class="step-number">2</div>
+            <div class="step-title">Clone the Repository</div>
+        </div>
+        <p>Download the Caelestia Shell source code. It is critical to include the <code>--recursive</code> flag so all necessary submodules are downloaded.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <code>git clone --recursive https://github.com/caelestia-dots/shell.git</code>
+        </div>
+    </div>
+
+    <div class="step-card">
+        <div class="step-header">
+            <div class="step-number">3</div>
+            <div class="step-title">Navigate to the Folder</div>
+        </div>
+        <p>Change your current directory into the newly downloaded repository folder.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <code>cd shell</code>
+        </div>
+    </div>
+
+    <div class="step-card">
+        <div class="step-header">
+            <div class="step-number">4</div>
+            <div class="step-title">Run the Installer Script</div>
+        </div>
+        <p>Make the script executable and launch the installation process. The script will request your password to install system dependencies via <code>apt</code>.</p>
+        <div class="warning-box">
+            <p><strong>Note:</strong> Do not run the script as root (do not use sudo before ./install-ubuntu.sh). The script will prompt for it automatically when needed.</p>
+        </div>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <code>chmod +x install-ubuntu.sh
+./install-ubuntu.sh</code>
+        </div>
+    </div>
+
+    <div class="step-card">
+        <div class="step-header">
+            <div class="step-number">5</div>
+            <div class="step-title">Grab a Coffee</div>
+        </div>
+        <p>The installer will compile Hyprland, Quickshell, and the Caelestia ecosystem from source. Depending on your hardware and internet connection, this process will take anywhere from <strong>30 to 60 minutes</strong>.</p>
+    </div>
+
+    <div class="step-card">
+        <div class="step-header">
+            <div class="step-number">6</div>
+            <div class="step-title">Log Out & Switch Sessions</div>
+        </div>
+        <p>Once the installation completes successfully:</p>
+        <ol style="margin-left: 20px; color: var(--text-muted); margin-bottom: 15px;">
+            <li style="margin-bottom: 5px;">Log out of your current Ubuntu session.</li>
+            <li style="margin-bottom: 5px;">At the login screen, click your username.</li>
+            <li style="margin-bottom: 5px;">Look for a <strong>gear icon</strong> (usually bottom right) and click it.</li>
+            <li style="margin-bottom: 5px;">Select <strong>"Caelestia (Hyprland)"</strong> from the list.</li>
+            <li style="margin-bottom: 5px;">Enter your password and log in to experience your new desktop!</li>
+        </ol>
+    </div>
+
+</div>
+
+<script>
+    function copyCode(btn) {
+        const codeElement = btn.nextElementSibling;
+        const text = codeElement.innerText;
+        
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btn.innerText;
+            btn.innerText = 'Copied!';
+            btn.style.background = 'rgba(56, 189, 248, 0.4)';
+            
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.background = 'rgba(255,255,255,0.1)';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+</script>
+
+</body>
+</html>
