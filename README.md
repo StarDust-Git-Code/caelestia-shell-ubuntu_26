@@ -16,7 +16,9 @@
 
 ## 🎥 Preview
 
-https://github.com/user-attachments/assets/0840f496-575c-4ca6-83a8-87bb01a85c5f
+<video src="https://github.com/user-attachments/assets/0840f496-575c-4ca6-83a8-87bb01a85c5f" controls="controls" muted="muted" style="max-height:640px;">
+  Your browser does not support the video tag.
+</video>
 
 ## ✨ What is this?
 
