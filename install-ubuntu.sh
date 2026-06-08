@@ -889,7 +889,6 @@ animations {
 
 # Layout
 dwindle {
-    pseudotile = true
     preserve_split = true
 }
 
@@ -899,8 +898,8 @@ bind = SUPER, Q, killactive
 bind = SUPER, M, exit
 bind = SUPER, E, exec, thunar
 bind = SUPER, V, togglefloating
-bind = SUPER, P, pseudo
-bind = SUPER, J, togglesplit
+# bind = SUPER, P, pseudo        # removed in latest Hyprland
+# bind = SUPER, J, togglesplit   # removed in latest Hyprland
 
 # Move focus
 bind = SUPER, left, movefocus, l
