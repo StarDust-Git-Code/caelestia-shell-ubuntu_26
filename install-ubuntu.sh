@@ -320,7 +320,10 @@ install_apt_deps() {
         libcli11-dev \
         libjemalloc-dev \
         python3-pip \
-        python3-pillow
+        python3-pillow \
+        papirus-icon-theme \
+        hyprland-qtutils \
+        sassc
     log_success "APT dependencies installed"
 }
 
@@ -561,7 +564,15 @@ build_caelestia_cli() {
         pip install --break-system-packages --user . 2>&1
         # Also install the shell helper script
         if [[ -f "bin/caelestia" ]]; then
-            sudo install -Dm755 bin/caelestia "$INSTALL_PREFIX/bin/caelestia" 2>/dev/null || true
+            # Patch launcher to include QML and lib paths
+            cat << 'EOF' > bin/caelestia.new
+#!/usr/bin/env sh
+export QML2_IMPORT_PATH="/usr/local/lib/qt6/qml:/usr/local/lib/x86_64-linux-gnu/qt6/qml:${QML2_IMPORT_PATH:-}"
+export LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH:-}"
+python3 -m caelestia "$@"
+EOF
+            chmod +x bin/caelestia.new
+            sudo install -Dm755 bin/caelestia.new "$INSTALL_PREFIX/bin/caelestia" 2>/dev/null || true
         fi
         # Install completions
         if [[ -d "completions" ]]; then
